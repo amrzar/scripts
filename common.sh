@@ -58,6 +58,10 @@ info () {
     _echo "${GREEN}[info] $NORMAL$*" >&2
 }
 
+warning () {
+    _echo "${YELLOW}[warning] $NORMAL$*" >&2
+}
+
 #
 # Report unrecoverable error and terminate script.
 # @params: a set of strings comprising a human-intelligible message
@@ -121,11 +125,11 @@ parse_argument() {
     return ${#arguments[@]}
 }
 
-function get_argument () {
-    local -n vn=$2
-
+get_argument () {
+    local -n vn=$2 # ... output parameter.
     if [[ ${arguments[$1]+set} = set ]]; then
         vn=${arguments[$1]}
+    elif [[ $# -eq 3 ]]; then
+        vn="$3"
     fi
 }
-
