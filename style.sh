@@ -52,7 +52,6 @@ export VERSION_CONTROL=none
 # -A8,   --style=linux
 # -s#,   --indent=spaces=#
 # -xV,   --attach-closing-while
-# -S,    --indent-switches
 # -xU,   --indent-after-parens
 # -w,    --indent-preproc-define
 # -Y,    --indent-col1-comments
@@ -65,6 +64,7 @@ export VERSION_CONTROL=none
 # -xf,   --attach-return-type
 # -c,    --convert-tabs
 # -xL,   --break-after-logical
+# -xC#,  --max-code-length=#
 #
 #   See https://astyle.sourceforge.net/astyle.html
 #
@@ -72,13 +72,22 @@ export VERSION_CONTROL=none
 if [[ -z "${USE_ASTYLE}" ]]; then
     indent -nbad -bap -nbc -nbbo -br -brs -c33 -cd33 -ncdb -ce -ci4 \
         -cli0 -d0 -di1 -nfc1 -i4 -ip0 -l80 -nlp -npcs -nprs -npsl -sai \
-        -saf -saw -ncs -nsc -nut -sob -nfca -ss -il1 -lps "${1}" -o "${1}.tmp"
+        -saf -saw -ncs -nsc -nut -sob -nfca -ss -il1 -lps "${1}" -o "${1}.tmp" 2> /dev/null || {
+            rm "${1}.tmp"
+            echo "indent: formatting ${1} failed."
+            exit 1
+        }
 else
-    astyle --style=linux --indent=spaces=4 --attach-closing-while --indent-switches \
+    astyle --style=linux --indent=spaces=4 --attach-closing-while \
         --indent-after-parens --indent-preproc-define --indent-col1-comments \
         --min-conditional-indent=0 --pad-oper --pad-comma --pad-header \
         --align-pointer=name --break-one-line-headers --attach-return-type \
-        --convert-tabs --break-after-logical --mode=c < "${1}" > "${1}.tmp"
+        --max-code-length=80 --convert-tabs --break-after-logical \
+        --mode=c < "${1}" > "${1}.tmp" 2> /dev/null || {
+            rm "${1}.tmp"
+            echo "astyle: formatting ${1} failed."      
+            exit 1
+        }
 fi
 
 cmp -s "${1}" "${1}.tmp"
