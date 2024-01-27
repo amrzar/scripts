@@ -3,10 +3,17 @@
 
 export VERSION_CONTROL=none
 
-[[ $# -ne 1 ]] && {
+[[ $# -lt 1 ]] && {
     echo "${0##*/}: input file is missing."
     exit 1
 }
+
+while read ing; do
+    [[ "${ing}" =~ ^#.*$ ]] || [[ ${#ing} -eq 0 ]] && continue
+    [[ "${1}" =~ .*"$(eval echo "${ing}")".* ]] && {
+        exit 0
+    }
+done < "${2}"
 
 #
 # These are subset of options that matches the '--linux-style'.
@@ -97,3 +104,5 @@ cmp -s "${1}" "${1}.tmp"
 }
 
 rm -f "${1}.tmp"
+
+exit 0
