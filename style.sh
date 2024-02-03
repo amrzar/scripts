@@ -15,6 +15,13 @@ while read ing; do
     }
 done < "${2}"
 
+# Make sure files end with new line.
+# 'indent' does it but it seems 'astyle' does not; so we do it here!
+
+if ! [[ $(tail -c1 "${1}" | wc -l) -gt 0 ]]; then
+    echo "" >> "${1}"
+fi
+
 #
 # These are subset of options that matches the '--linux-style'.
 #
