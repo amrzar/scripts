@@ -85,7 +85,7 @@ fi
 
 if [[ -z "${USE_ASTYLE}" ]]; then
     indent -nbad -bap -nbc -nbbo -br -brs -c33 -cd33 -ncdb -ce -ci4 \
-        -cli0 -d0 -di1 -nfc1 -i4 -ip0 -l80 -nlp -npcs -nprs -npsl -sai \
+        -cli0 -d0 -di1 -nfc1 -i4 -ip0 -l100 -nlp -npcs -nprs -npsl -sai \
         -saf -saw -ncs -nsc -nut -sob -nfca -ss -il1 -lps "${1}" -o "${1}.tmp" 2> /dev/null || {
             rm "${1}.tmp"
             echo "indent: formatting ${1} failed."
@@ -96,7 +96,7 @@ else
         --indent-after-parens --indent-preproc-define --indent-col1-comments \
         --min-conditional-indent=0 --pad-oper --pad-comma --pad-header \
         --align-pointer=name --break-one-line-headers --attach-return-type \
-        --max-code-length=80 --convert-tabs --break-after-logical \
+        --max-code-length=100 --convert-tabs --break-after-logical \
         --mode=c < "${1}" > "${1}.tmp" 2> /dev/null || {
             rm "${1}.tmp"
             echo "astyle: formatting ${1} failed."      
