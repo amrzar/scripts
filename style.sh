@@ -8,12 +8,14 @@ export VERSION_CONTROL=none
     exit 1
 }
 
-while read ing; do
-    [[ "${ing}" =~ ^#.*$ ]] || [[ ${#ing} -eq 0 ]] && continue
-    [[ "${1}" =~ .*"$(eval echo "${ing}")".* ]] && {
-        exit 0
-    }
-done < "${2}"
+if [[ $# -eq 2 ]]; then
+    while read ing; do
+        [[ "${ing}" =~ ^#.*$ ]] || [[ ${#ing} -eq 0 ]] && continue
+        [[ "${1}" =~ .*"$(eval echo "${ing}")".* ]] && {
+            exit 0
+        }
+    done < "${2}"
+fi
 
 # Make sure files end with new line.
 # 'indent' does it but it seems 'astyle' does not; so we do it here!
