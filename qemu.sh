@@ -4,7 +4,7 @@
 set -e
 
 [[ $# -lt 2 ]] && {
-    echo "${0##*/}: [UKERNEL] [DISK]."
+    echo "${0##*/}: [UKERNEL] [DISK] -- [QEMU parameters]."
     exit 1
 }
 
@@ -51,6 +51,7 @@ sudo mount ${PART} ${WORKSPACE}/mnt
 sudo mkdir -p ${WORKSPACE}/mnt/EFI/BOOT
 echo "  copy $(basename ${UKERNEL}) /EFI/BOOT/BOOTX64.EFI"
 sudo cp ${UKERNEL} ${WORKSPACE}/mnt/EFI/BOOT/BOOTX64.EFI
+sudo echo "fs0:\EFI\BOOT\BOOTX64.EFI" | sudo tee /mnt/startup.nsh
 sudo umount ${WORKSPACE}/mnt
 
 sudo losetup -d ${DEVICE}
